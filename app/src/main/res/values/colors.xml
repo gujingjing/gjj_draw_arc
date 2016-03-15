@@ -4,7 +4,12 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="colorAccent1">#69cbd2</color>
-    <color name="colorAccent2">#7eb6e2</color>
-    <color name="colorAccent3">#989df7</color>
+
+
+    <color name="colordefault">#999999</color>
+    <color name="colorAccent1">#5bb5eb</color>
+    <color name="colorAccent2">#8bd07c</color>
+    <color name="colorAccent3">#e8dd5f</color>
+    <color name="colorAccent4">#e97e5a</color>
+    <color name="colorAccent5">#ea4646</color>
 </resources>

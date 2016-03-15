@@ -10,12 +10,18 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.SweepGradient;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
+
+import java.text.DecimalFormat;
 
 /**
  * 作者：gjj on 2016/3/14 11:18
  * 邮箱：Gujj512@163.com
+ *
+ * 建议主界面背景色改为:android:background="#eeeeee"
  */
 public class ProgressViewNew extends View {
 
@@ -26,18 +32,40 @@ public class ProgressViewNew extends View {
     private int  DEFAULT_LITLE_WIDTH = dipToPx(5);
 
     private ValueAnimator progressAnimator;
-    private float textSize = dipToPx(18);
+    private float textSize = dipToPx(15);
+    private float BIM_textSize = dipToPx(16);
+    private float Number_textSize = dipToPx(30);
     private int padding=dipToPx(10);//默认胖和瘦距离上面圆环的距离
     private int marging=(int)(Math.max(DEFAULT_BORDER_WIDTH,textSize));
-    private float currentAngle=150;
+    private float currentAngle=0;
+    private String PANG_NUMBER="";
+    //当前的分数
+    private float maxCount=50;
+    private float currentCount=0;
+    private float startAngle = 180;//开始绘制的角度
+    private float lastAngle=180;//最后绘制的角度
+
+    private int aniSpeed = 1000;//设置滚动的速度
+
+    DecimalFormat df = new DecimalFormat("0.0");//格式化小数，不足的补0
     //分段颜色
 //    private int[] colors = new int[]{Color.GREEN, Color.YELLOW, Color.RED, Color.RED};
     private int[] colors = new int[]{getResources().getColor(R.color.colorAccent1),
             getResources().getColor(R.color.colorAccent2),
-            getResources().getColor(R.color.colorAccent3)};
-    //当前的分数
-    private float maxCount=50;
-    private float currentCount=30;
+            getResources().getColor(R.color.colorAccent3),
+            getResources().getColor(R.color.colorAccent4),
+            getResources().getColor(R.color.colorAccent5)
+    };
+    /**
+     * 填充色主要参数：
+     colors[]
+     positions[]
+     即每个position定义一个color值，注意position是一个相对位置，其值应该在0.0到1.0之间。
+     18.5/24.0/28.0/35.0
+     */
+    private float positions[]=new float[colors.length];
+    //分割区域的数值
+    private double position_line[] = new double[]{0,18.5,24.0,28.0,35.0};
 
     public ProgressViewNew(Context context) {
         super(context);
@@ -50,10 +78,11 @@ public class ProgressViewNew extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
         //1------绘制默认灰色的圆弧
         float r = Math.min(getHeight() / 2, getWidth() / 2);//半径
         Paint paintDefalt = new Paint();
-        paintDefalt.setColor(Color.LTGRAY);
+        paintDefalt.setColor(getResources().getColor(R.color.colordefault));
         //设置笔刷的样式 Paint.Cap.Round ,Cap.SQUARE等分别为圆形、方形
         paintDefalt.setStrokeCap(Paint.Cap.SQUARE);
         float borderWidth = DEFAULT_BORDER_WIDTH;//圆弧宽度
@@ -94,22 +123,28 @@ public class ProgressViewNew extends View {
          static final Shader.TileMode MIRROR：在水平方向和垂直方向交替景象, 两个相邻图像间没有缝隙.
          Static final Shader.TillMode REPETA：在水平方向和垂直方向重复摆放,两个相邻图像间有缝隙缝隙.
          */
-        LinearGradient lg=new LinearGradient(0,0,100,100,colors,null, Shader.TileMode.MIRROR);  //渐变颜色
+
+        LinearGradient lg=new LinearGradient(0,0,100,100,colors,positions, Shader.TileMode.MIRROR);  //渐变颜色
         // 创建SweepGradient对象
         // 第一个,第二个参数中心坐标
         // 后面的参数与线性渲染相同
-        SweepGradient mSweepGradient = new SweepGradient(centerX, centerX, new int[] {Color.CYAN,Color.DKGRAY,Color.GRAY,Color.LTGRAY,Color.MAGENTA,
-                Color.GREEN,Color.TRANSPARENT, Color.BLUE }, null);
-//        paintCurrent.setShader(mSweepGradient);//渐变颜色--设置
 
-        SweepGradient sweepGradient = new SweepGradient(centerX+padding, centerX+padding, colors, null);
+        //18.5/24.0/28.0/35.0
+        positions[0]=Float.parseFloat(df.format(position_line[0]/maxCount));
+        positions[1]=Float.parseFloat(df.format(position_line[1]/maxCount));
+        positions[2]=Float.parseFloat(df.format(position_line[2]/maxCount));
+        positions[3]=Float.parseFloat(df.format(position_line[3]/maxCount));
+        positions[4]=Float.parseFloat(df.format(position_line[4]/maxCount));
+
+        SweepGradient sweepGradient = new SweepGradient(centerX+padding, centerX+padding, colors, positions);
         Matrix matrix = new Matrix();
-//        matrix.setRotate(130, centerX, centerX);//加上旋转还是很有必要的，每次最右边总是有一部分多余了,不太美观,也可以不加
+        matrix.setRotate(130, centerX, centerX);//加上旋转还是很有必要的，每次最右边总是有一部分多余了,不太美观,也可以不加
         sweepGradient.setLocalMatrix(matrix);
         paintCurrent.setShader(sweepGradient);
 
-        canvas.drawArc(oval1, 180, currentAngle, false, paintCurrent);//小弧形
-
+//        canvas.drawArc(oval1, 180, currentAngle, false, paintCurrent);//小弧形
+        //当前进度
+        canvas.drawArc(oval1, startAngle, currentAngle, false, paintCurrent);
         //3----文字
         //内容显示文字
         Paint vTextPaint = new Paint();
@@ -123,8 +158,22 @@ public class ProgressViewNew extends View {
         canvas.drawText("瘦", marging, centerX+marging+textSize+padding, vTextPaint);
         canvas.drawText("胖", getWidth()-marging, centerX+marging+textSize+padding, vTextPaint);
         //圆环中心的文字
+        vTextPaint.setTextSize(BIM_textSize);
         canvas.drawText("BMI指数", getWidth()/2, (int)((centerX+marging)/3*1.5+textSize), vTextPaint);
-        canvas.drawText("31.5", getWidth()/2, (int)((centerX+marging)/3*2.5+textSize), vTextPaint);
+
+        //设置肥胖指数
+        /**
+         * 常用的字体风格名称还有：
+         * Typeface.BOLD //粗体
+         * Typeface.BOLD_ITALIC //粗斜体
+         * Typeface.ITALIC //斜体
+         * Typeface.NORMAL //常规
+         */
+        vTextPaint.setTextSize(Number_textSize);
+        Typeface font = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
+        vTextPaint.setTypeface( font );
+
+        canvas.drawText(PANG_NUMBER, getWidth()/2, (int)((centerX+marging)/3*2.5+textSize), vTextPaint);
 
         //4---绘制圆弧上的小圆球--根据currentAngle
         /**
@@ -132,11 +181,11 @@ public class ProgressViewNew extends View {
          Paint.Style.FILL_AND_STROKE  ：填充内部和描边
          Paint.Style.STROKE  ：仅描边
          */
-        canvas.translate(centerX+padding, centerX+padding);//这时候的画布已经移动到了中心位置
+        canvas.translate(getWidth()/2, getHeight()/2);//这时候的画布已经移动到了中心位置
         Paint paintCircle = new Paint();
         paintCircle.setStyle(Paint.Style.FILL);//设置填充样式
         paintCircle.setAntiAlias(true);//抗锯齿功能
-        paintCircle.setColor(Color.RED);
+        paintCircle.setColor(Color.WHITE);
 //        paintCircle.setStrokeWidth(borderLitalWidth);//设置画笔宽度
 
 //            canvas.drawCircle((float)(centerX+padding-centerX*Math.cos(currentAngle)), (float)(centerX+padding-centerX*Math.sin(currentAngle)), DEFAULT_LITLE_WIDTH, paintCircle);//画圆,圆心在中心位置,半径为长宽小者的一半
@@ -152,7 +201,8 @@ public class ProgressViewNew extends View {
         canvas.rotate(currentAngle);
         canvas.drawCircle(-centerX,0,DEFAULT_LITLE_WIDTH,paintCircle);
         canvas.rotate(-currentAngle);
-        
+
+        invalidate();
     }
 
     @Override
@@ -209,4 +259,37 @@ public class ProgressViewNew extends View {
         return (int)(dip * density + 0.5f * (dip >= 0 ? 1 : -1));
     }
 
+    /***
+     * 设置当前的进度值
+     *
+     * @param currentCounts
+     */
+    public void setCurrentCount(float currentCounts) {
+//        this.currentCount = currentCounts > maxCount ? maxCount : currentCounts;
+        float curren=Float.parseFloat(df.format(currentCounts/maxCount));//返回的是String类型的
+        float last_angle=180*(curren>1?1:curren);//最后要到达的角度
+        PANG_NUMBER=currentCounts+"";//肥胖指数的设置
+        lastAngle = currentAngle;//保存最后绘制的位置
+        setAnimation(lastAngle, last_angle, aniSpeed);
+    }
+    /**
+     * 为进度设置动画
+     * @param last
+     * @param current
+     */
+    private void setAnimation(float last, float current, int length) {
+        progressAnimator = ValueAnimator.ofFloat(last, current);
+        Log.e("last=====",last+"");
+        Log.e("current=====",current+"");
+        progressAnimator.setDuration(length);
+//        progressAnimator.setTarget(currentAngle);
+        progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                currentAngle= (float) animation.getAnimatedValue();
+            }
+        });
+        progressAnimator.start();
+    }
 }

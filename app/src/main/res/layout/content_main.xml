@@ -9,11 +9,16 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_main"
     android:orientation="vertical"
+    android:background="#eeeeee"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context="gjj_unit_test.gjj_draw_arc.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="vertical">
         <gjj_unit_test.gjj_draw_arc.DrawView
             android:layout_marginTop="15dp"
@@ -28,13 +33,21 @@
             android:layout_gravity="center_horizontal"
             android:layout_width="150dp"
             android:layout_height="150dp" />
+        <EditText
+            android:id="@+id/et_test"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:hint="请输入BIM指数"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/btn_test"
+            android:layout_marginTop="10dp"
+            android:text="点击测试"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
         <gjj_unit_test.gjj_draw_arc.ProgressViewNew
-            android:layout_marginTop="15dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="200dp"
-            android:layout_height="200dp" />
-        <gjj_unit_test.gjj_draw_arc.ProgressViewNew2
-            android:visibility="gone"
+            android:id="@+id/proViewnew"
             android:layout_marginTop="15dp"
             android:layout_gravity="center_horizontal"
             android:layout_width="200dp"
