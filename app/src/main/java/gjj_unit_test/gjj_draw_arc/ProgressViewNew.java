@@ -202,7 +202,7 @@ public class ProgressViewNew extends View {
         canvas.drawCircle(-centerX,0,DEFAULT_LITLE_WIDTH,paintCircle);
         canvas.rotate(-currentAngle);
 
-        invalidate();
+
     }
 
     @Override
@@ -288,6 +288,7 @@ public class ProgressViewNew extends View {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 currentAngle= (float) animation.getAnimatedValue();
+                invalidate();
             }
         });
         progressAnimator.start();
