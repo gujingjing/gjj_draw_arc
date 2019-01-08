@@ -39,13 +39,31 @@ tasks.withType(Javadoc) {
 }
 
 
+
+
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 //发布到 Bintray
 publish {
 
-    userOrg = 'duanruirui'           //bintray.com 注册的用户名
-    groupId = 'com.jcenterlibrary'   //以后访问 jcenter上此项目的路径，一般和库项目的包名一致
-    artifactId = 'JCenterDemo'       //bintray.com 创建的 Package 名
-    publishVersion = '1.0.13'         //版本号
-    desc = '这是一个不认真的版本说明' //版本说明，随意
-    website = 'https://github.com/DRPrincess/DR_MavenDemo'    //关于这个开源项目的网站，随意
+    userOrg = '${bintray.user}'           //bintray.com 注册的用户名
+    groupId = '${group_view}'   //以后访问 jcenter上此项目的路径，一般和库项目的包名一致
+    artifactId = '${progress_view_artifactId}'       //bintray.com 创建的 Package 名
+    publishVersion = '${progress_view_version}'         //版本号
+    desc = '${progress_view_des}' //版本说明，随意
+    website = 'https://github.com/gujingjing'    //关于这个开源项目的网站，随意
 }
+
+/**
+ * user就是用户名，key就是我们刚才的Api key
+ * dryRun是一个配置参数，当为true的时候，会运行所有的环节，但是不会上传。
+ */
+//./gradlew clean build bintrayUpload
+// -PbintrayUser=sanjiren
+// -PbintrayKey=xxxxxxxxxxxxxxxxxxxxxx
+// -PdryRun=false
+
+
+//./gradlew clean build generatePomFileForReleasePublication bintrayUpload -PbintrayUser=sanjiren -PbintrayKey=BINTRAY_KEY -PdryRun=false
