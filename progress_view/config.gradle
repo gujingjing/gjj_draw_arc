@@ -49,7 +49,7 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 publish {
 
     userOrg = properties.getProperty("bintray.user")           //bintray.com 注册的用户名
-    groupId = properties.getProperty("group_view")  //以后访问 jcenter上此项目的路径，一般和库项目的包名一致
+    groupId = properties.getProperty("groupId_view")  //以后访问 jcenter上此项目的路径，一般和库项目的包名一致
     artifactId = properties.getProperty("progress_view_artifactId")      //bintray.com 创建的 Package 名
     publishVersion = properties.getProperty("progress_view_version")         //版本号
     desc = properties.getProperty("progress_view_des")//版本说明，随意
@@ -59,6 +59,10 @@ publish {
 /**
  * user就是用户名，key就是我们刚才的Api key
  * dryRun是一个配置参数，当为true的时候，会运行所有的环节，但是不会上传。
+ * 操作网址
+ * https://lipeng1667.github.io/2016/09/23/how-to-share-your-library/
+ * https://juejin.im/post/5a98f8616fb9a028ca5269c6
+ *
  */
 //./gradlew clean build bintrayUpload
 // -PbintrayUser=sanjiren
