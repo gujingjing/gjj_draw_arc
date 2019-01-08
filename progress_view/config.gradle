@@ -64,6 +64,8 @@ publish {
  * https://segmentfault.com/a/1190000012263759
  * https://juejin.im/post/5a98f8616fb9a028ca5269c6
  *
+ * 注意:
+ *      local.propertites的 bintray.apikey 必填
  */
 //./gradlew clean build bintrayUpload
 // -PbintrayUser=sanjiren
