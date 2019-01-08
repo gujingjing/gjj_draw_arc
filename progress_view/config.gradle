@@ -41,9 +41,9 @@ tasks.withType(Javadoc) {
 
 
 
-
+//获取本地文件内容  也可以是 local.properties
 Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
+properties.load(project.rootProject.file('gradle.properties').newDataInputStream())
 
 //发布到 Bintray
 publish {
@@ -61,6 +61,7 @@ publish {
  * dryRun是一个配置参数，当为true的时候，会运行所有的环节，但是不会上传。
  * 操作网址
  * https://lipeng1667.github.io/2016/09/23/how-to-share-your-library/
+ * https://segmentfault.com/a/1190000012263759
  * https://juejin.im/post/5a98f8616fb9a028ca5269c6
  *
  */
