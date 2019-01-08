@@ -1,10 +1,9 @@
-package gjj_unit_test.gjj_draw_arc;
+package gjj.progress.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;

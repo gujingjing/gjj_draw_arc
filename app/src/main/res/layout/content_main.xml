@@ -20,14 +20,14 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:orientation="vertical">
-        <gjj_unit_test.gjj_draw_arc.DrawView
+        <gjj.progress.view.DrawView
             android:layout_marginTop="15dp"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_centerInParent="true"
             android:background="#05FF0000"
             android:layout_gravity="center_horizontal"/>
-        <gjj_unit_test.gjj_draw_arc.ProgressView
+        <gjj.progress.view.ProgressView
             android:id="@+id/pregress"
             android:layout_marginTop="15dp"
             android:layout_gravity="center_horizontal"
@@ -46,7 +46,7 @@
             android:text="点击测试"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <gjj_unit_test.gjj_draw_arc.ProgressViewNew
+        <gjj.progress.view.ProgressViewNew
             android:id="@+id/proViewnew"
             android:layout_marginTop="15dp"
             android:layout_gravity="center_horizontal"

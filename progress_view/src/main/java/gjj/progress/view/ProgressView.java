@@ -1,4 +1,4 @@
-package gjj_unit_test.gjj_draw_arc;
+package gjj.progress.view;
 
 import android.content.Context;
 import android.graphics.Canvas;

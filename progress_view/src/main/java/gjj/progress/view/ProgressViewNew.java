@@ -1,4 +1,4 @@
-package gjj_unit_test.gjj_draw_arc;
+package gjj.progress.view;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -42,7 +42,7 @@ public class ProgressViewNew extends View {
     //当前的分数
     private float maxCount=50;
     private float currentCount=0;
-    private float startAngle = 180;//开始绘制的角度
+    private float startAngle = 0;//开始绘制的角度
     private float lastAngle=180;//最后绘制的角度
 
     private int aniSpeed = 1000;//设置滚动的速度
@@ -108,7 +108,7 @@ public class ProgressViewNew extends View {
          参数三扫描角(度)开始顺时针测量的，参数四是如果这是真的话,包括椭圆中心的电弧,并关闭它,如果它是假这将是一个弧线,参数五是Paint对象；
          */
         //绘制默认灰色的圆弧
-        canvas.drawArc(oval1, 180, 180, false, paintDefalt);//小弧形
+        canvas.drawArc(oval1, 0, 180, false, paintDefalt);//小弧形
 //        参数一为渐变起初点坐标x位置，参数二为y轴位置，参数三和四分辨对应渐变终点，最后参数为平铺方式，这里设置为镜像.
 
         //2-----绘制当前进度的圆弧
@@ -124,7 +124,7 @@ public class ProgressViewNew extends View {
          Static final Shader.TillMode REPETA：在水平方向和垂直方向重复摆放,两个相邻图像间有缝隙缝隙.
          */
 
-        LinearGradient lg=new LinearGradient(0,0,100,100,colors,positions, Shader.TileMode.MIRROR);  //渐变颜色
+        LinearGradient lg=new LinearGradient(0,0,getWidth(),getWidth(),colors,positions, Shader.TileMode.MIRROR);  //渐变颜色
         // 创建SweepGradient对象
         // 第一个,第二个参数中心坐标
         // 后面的参数与线性渲染相同
@@ -138,9 +138,10 @@ public class ProgressViewNew extends View {
 
         SweepGradient sweepGradient = new SweepGradient(centerX+padding, centerX+padding, colors, positions);
         Matrix matrix = new Matrix();
-        matrix.setRotate(130, centerX, centerX);//加上旋转还是很有必要的，每次最右边总是有一部分多余了,不太美观,也可以不加
+        matrix.setRotate(270, centerX, centerX);//加上旋转还是很有必要的，每次最右边总是有一部分多余了,不太美观,也可以不加
         sweepGradient.setLocalMatrix(matrix);
         paintCurrent.setShader(sweepGradient);
+//        paintCurrent.setShader(lg);
 
 //        canvas.drawArc(oval1, 180, currentAngle, false, paintCurrent);//小弧形
         //当前进度
@@ -155,11 +156,12 @@ public class ProgressViewNew extends View {
         vTextPaint.setTextAlign(Paint.Align.CENTER);
 
         //TODO 等待修改
-        canvas.drawText("瘦", marging, centerX+marging+textSize+padding, vTextPaint);
-        canvas.drawText("胖", getWidth()-marging, centerX+marging+textSize+padding, vTextPaint);
+        canvas.drawText("瘦", marging, centerX+marging+textSize+padding-centerX/2, vTextPaint);
+        canvas.drawText("胖", getWidth()-marging, centerX+marging+textSize+padding-centerX/2, vTextPaint);
         //圆环中心的文字
         vTextPaint.setTextSize(BIM_textSize);
-        canvas.drawText("BMI指数", getWidth()/2, (int)((centerX+marging)/3*1.5+textSize), vTextPaint);
+        canvas.drawText("BMI指数", getWidth()/2, (int)((centerX+marging)/3*1.5+textSize)+centerX/2, vTextPaint);
+
 
         //设置肥胖指数
         /**
@@ -173,7 +175,7 @@ public class ProgressViewNew extends View {
         Typeface font = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
         vTextPaint.setTypeface( font );
 
-        canvas.drawText(PANG_NUMBER, getWidth()/2, (int)((centerX+marging)/3*2.5+textSize), vTextPaint);
+        canvas.drawText(PANG_NUMBER, getWidth()/2, (int)((centerX+marging)/3*2.5+textSize)+centerX/2, vTextPaint);
 
         //4---绘制圆弧上的小圆球--根据currentAngle
         /**
@@ -199,7 +201,7 @@ public class ProgressViewNew extends View {
 //        canvas.drawCircle(padding,centerX+padding,DEFAULT_LITLE_WIDTH,paintCircle);
 //        canvas.rotate(currentAngle, centerX+padding, centerX+padding);//以圆心旋转的
         canvas.rotate(currentAngle);
-        canvas.drawCircle(-centerX,0,DEFAULT_LITLE_WIDTH,paintCircle);
+        canvas.drawCircle(centerX,0,DEFAULT_LITLE_WIDTH,paintCircle);
         canvas.rotate(-currentAngle);
 
 
