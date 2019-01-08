@@ -24,5 +24,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:26.0.2'
     compile 'com.android.support:design:26.0.2'
-    compile project(':progress_view')
+
+    compile 'gjj.view.progress:progress_view:1.0.0'
+//    compile project(':progress_view')
 }

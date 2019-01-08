@@ -48,11 +48,11 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 //发布到 Bintray
 publish {
 
-    userOrg = '${bintray.user}'           //bintray.com 注册的用户名
-    groupId = '${group_view}'   //以后访问 jcenter上此项目的路径，一般和库项目的包名一致
-    artifactId = '${progress_view_artifactId}'       //bintray.com 创建的 Package 名
-    publishVersion = '${progress_view_version}'         //版本号
-    desc = '${progress_view_des}' //版本说明，随意
+    userOrg = properties.getProperty("bintray.user")           //bintray.com 注册的用户名
+    groupId = properties.getProperty("group_view")  //以后访问 jcenter上此项目的路径，一般和库项目的包名一致
+    artifactId = properties.getProperty("progress_view_artifactId")      //bintray.com 创建的 Package 名
+    publishVersion = properties.getProperty("progress_view_version")         //版本号
+    desc = properties.getProperty("progress_view_des")//版本说明，随意
     website = 'https://github.com/gujingjing'    //关于这个开源项目的网站，随意
 }
 
