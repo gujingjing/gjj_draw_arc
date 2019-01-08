@@ -57,7 +57,7 @@ install {
         pom {
             project {
                 packaging 'aar'
-                name 'baseui'
+                name 'progress_view'
                 url siteUrl
                 licenses {
                     license {
@@ -67,9 +67,9 @@ install {
                 }
                 developers {
                     developer {
-                        id 'JayZhao'
-                        name 'Zhaojiabao'
-                        email '1760064052@qq.com'
+                        id 'gujingjing'
+                        name 'gujingjing'
+                        email '1546804319@qq.com'
                     }
                 }
                 scm {
