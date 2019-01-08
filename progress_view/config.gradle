@@ -1,36 +1,16 @@
-/** 以下开始是将Android Library上传到JCenter的相关配置**/
+apply plugin: 'com.novoda.bintray-release'//添加
 
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
-
-//项目主页
-def siteUrl = 'https://github.com/JayZhaoCN'
-//项目的版本控制地址
-def gitUrl = 'https://github.com/JayZhaoCN'
-
-//发布到组织名称名字，必须填写
-group = "${group}"
-//发布到JCenter上的项目名字，必须填写
-def libName = "${progress_view_lib}"
-// 版本号，下次更新是只需要更改版本号即可
-version = "${progress_view_version}"
-/**  上面配置后上传至JCenter后的编译路径是这样的： compile 'group:libName:version'  **/
 
 //生成源文件
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier = 'sources'
 }
-//生成文档
+
+//生成Javadoc文档
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    options.encoding "UTF-8"
-    options.charSet 'UTF-8'
-    options.author true
-    options.version true
-    options.links "https://github.com/JayZhaoCN"
-    failOnError false
 }
 
 //文档打包成jar
@@ -38,62 +18,34 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
+
 //拷贝javadoc文件
 task copyDoc(type: Copy) {
     from "${buildDir}/docs/"
     into "docs"
 }
 
-//上传到jCenter所需要的源码文件
+//上传到JCenter所需要的源码文件
 artifacts {
     archives javadocJar
     archives sourcesJar
 }
 
-// 配置maven库，生成POM.xml文件
-install {
-    repositories.mavenInstaller {
-        // This generates POM.xml with proper parameters
-        pom {
-            project {
-                packaging 'aar'
-                name 'progress_view'
-                url siteUrl
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'gujingjing'
-                        name 'gujingjing'
-                        email '1546804319@qq.com'
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-                }
-            }
-        }
-    }
+//解决 JavaDoc 中文注释生成失败的问题
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
 }
 
-//上传到JCenter
-bintray {
-    user = "${bintray.user}"    //读取 local.properties 文件里面的 bintray.user
-    key = "${bintray.apikey}"   //读取 local.properties 文件里面的 bintray.apikey
-    configurations = ['archives']
-    pkg {
-        repo = "maven"
-        name = libName    //发布到JCenter上的项目名字，必须填写
-        desc = 'des'    //项目描述
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ["Apache-2.0"]
-        publish = true
-    }
+
+//发布到 Bintray
+publish {
+
+    userOrg = 'duanruirui'           //bintray.com 注册的用户名
+    groupId = 'com.jcenterlibrary'   //以后访问 jcenter上此项目的路径，一般和库项目的包名一致
+    artifactId = 'JCenterDemo'       //bintray.com 创建的 Package 名
+    publishVersion = '1.0.13'         //版本号
+    desc = '这是一个不认真的版本说明' //版本说明，随意
+    website = 'https://github.com/DRPrincess/DR_MavenDemo'    //关于这个开源项目的网站，随意
 }
