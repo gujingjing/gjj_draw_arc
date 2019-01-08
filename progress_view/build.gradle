@@ -33,3 +33,6 @@ dependencies {
     })
 
 }
+
+//Maven配置
+apply from: 'config.gradle'
