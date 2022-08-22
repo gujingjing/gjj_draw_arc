@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/gjj_draw_arc.iml" filepath="$PROJECT_DIR$/gjj_draw_arc.iml" />
-      <module fileurl="file://$PROJECT_DIR$/progress_view/progress_view.iml" filepath="$PROJECT_DIR$/progress_view/progress_view.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gjj_draw_arc.iml" filepath="$PROJECT_DIR$/.idea/modules/gjj_draw_arc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/gjj_draw_arc.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/gjj_draw_arc.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/progress_view/gjj_draw_arc.progress_view.iml" filepath="$PROJECT_DIR$/.idea/modules/progress_view/gjj_draw_arc.progress_view.iml" />
     </modules>
   </component>
 </project>

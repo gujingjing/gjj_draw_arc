@@ -1,0 +1,83 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+ext["signing.keyId"] = ''
+ext["signing.password"] = ''
+ext["signing.secretKeyRingFile"] = ''
+ext["ossrhUsername"] = ''
+ext["ossrhPassword"] = ''
+ext["SONATYPE_ID"] = ''
+ext["SONATYPE_NAME"] = ''
+ext["SONATYPE_EMAIL"] = ''
+
+File secretPropsFile = project.rootProject.file('local.properties')
+if (secretPropsFile.exists()) {
+    println "Found secret props file, loading props"
+    Properties p = new Properties()
+    p.load(new FileInputStream(secretPropsFile))
+    p.each { name, value ->
+        ext[name] = value
+    }
+} else {
+    println "No props file, loading env vars"
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'io.github.running-libo'  //sonatype平台创建的groupId
+                artifactId = project.name
+                version = '1.0.0'  //库版本名
+
+                project.ext["signing.keyId"] = "xxxxxxxx"  //GPG指纹后8位
+                project.ext["signing.password"] = "xxxxxxxxxxx"  //GPG密码
+                project.ext["signing.secretKeyRingFile"] = "/xxxxx/xxxxxxxxxxxxxxx.gpg" //GPG私钥
+
+                pom {
+                    name = "flowlayout"
+                    description = "noting to description"
+                    url = "https://github.com/running-libo"  //github主页地址
+                    licenses {
+                        license {
+                            name = "The Apache License, Version 2.0"
+                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                        }
+                    }
+                    developers {
+                        developer {  //填开发者信息
+                            id = "libo"
+                            name = "libo"
+                            email = "xxxxxxxxx.com"
+                        }
+                    }
+                    scm {
+                        connection = "scm:svn:http://github.com/running-libo"   //后面为github主页地址
+                        developerConnection = "scm:svn:https://github.com/running-libo"  //后面为github主页地址
+                        url = "http://github.com/running-libo" //github主页地址
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                // release  https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/  //正式上传地址
+                name = 'progress_view'
+//                url = "https://s01.oss.sonatype.org/content/repositories/snapshots/" //快照上传地址
+//                url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+
+                credentials {
+                    //sonatype平台账号密码
+                    username = "xxxxxxx"
+                    password = "xxxxxxxxx"
+                }
+            }
+        }
+    }
+    project.signing {
+        sign project.publishing.publications
+    }
+}
