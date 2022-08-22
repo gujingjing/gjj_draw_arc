@@ -26,31 +26,6 @@ android {
             def fileName = "${archivesBaseName}-${version}.aar"
             outputFileName = fileName
         }
-        task("generate${variant.name}Javadoc", type: Javadoc) {
-//        task("generateJavadoc", type: Javadoc) {
-            title = "$name $version API"
-            source = variant.javaCompile.source
-            ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-            doFirst {
-                classpath = files(variant.javaCompile.classpath.files, ext.androidJar)
-            }
-            options {
-                links("http://docs.oracle.com/javase/11/docs/api/");
-                linksOffline("http://d.android.com/reference", "${android.sdkDirectory}/docs/reference");
-                encoding "UTF-8"
-                charSet 'UTF-8'
-                author true
-                version true
-                splitIndex true
-                noDeprecated true
-                setMemberLevel(JavadocMemberLevel.PUBLIC)
-            }
-            failOnError false
-//            exclude '**/BuildConfig.java'
-//            exclude '**/R.java'
-//            destinationDir = reporting.file("$project.rootDir/docs/")
-            destinationDir = reporting.file("$project.buildDir/outputs/jar/javadoc/")
-        }
     }
 }
 
