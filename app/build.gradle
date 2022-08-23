@@ -20,11 +20,13 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:26.0.2'
-    compile 'com.android.support:design:26.0.2'
+    implementation 'com.android.support:appcompat-v7:26.0.2'
+    implementation 'com.android.support:design:26.0.2'
 
-    compile 'gjj.view.progress:progress_view:1.0.2'
+//    implementation 'africa.absa:inception:1.2.0'
+    implementation 'io.github.gujingjing:draw_arc:0.1.0'
+    implementation 'gjj.view.progress:progress_view:1.0.2'
 //    compile project(':progress_view')
 }

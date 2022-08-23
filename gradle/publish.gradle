@@ -15,25 +15,17 @@ tasks.whenTaskAdded { task ->
 }
 
 task("generatereleaseJavadoc", type: Javadoc) {
-    title = "$name $version API"
+    failOnError false
     source = android.sourceSets.main.java.srcDirs
     ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
     doFirst {
         classpath += configurations.compile
         classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     }
-    options {
-        links("http://docs.oracle.com/javase/11/docs/api/");
-        linksOffline("http://d.android.com/reference", "${android.sdkDirectory}/docs/reference");
-        encoding "UTF-8"
-        charSet 'UTF-8'
-        author true
-        version true
-        splitIndex true
-        noDeprecated true
-        setMemberLevel(JavadocMemberLevel.PUBLIC)
-    }
-    failOnError false
+
+    options.memberLevel = JavadocMemberLevel.PUBLIC
+    options.addStringOption('Xdoclint:none', '-quiet')
+
     exclude '**/BuildConfig.java'
     exclude '**/R.java'
     destinationDir = reporting.file("$project.buildDir/outputs/jar/javadoc/")
@@ -41,7 +33,7 @@ task("generatereleaseJavadoc", type: Javadoc) {
 
 // Task to generate javadoc.jar
 task javadocJar(type: Jar, dependsOn: generatereleaseJavadoc) {
-    from "generatereleaseJavadoc.destinationDir"
+    from generatereleaseJavadoc.destinationDir
 
     classifier 'javadoc'
     destinationDirectory = reporting.file("$project.buildDir/outputs/jar/")
@@ -53,18 +45,10 @@ task sourcesJar(type: Jar) {
     destinationDirectory = reporting.file("$project.buildDir/outputs/jar/")
 }
 
-task androidSourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.source
-
-    exclude "**/R.class"
-    exclude "**/BuildConfig.class"
-}
-
 ext {
     PUBLISH_GROUP_ID = 'io.github.gujingjing'
     PUBLISH_ARTIFACT_ID = "draw_arc"
-    PUBLISH_VERSION = '0.1.0'
+    PUBLISH_VERSION = '0.1.1'
 }
 
 ext["signing.keyId"] = ''
